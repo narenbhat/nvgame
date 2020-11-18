@@ -1,0 +1,329 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Download</title>
+            <meta charset="UTF-8">
+            <link href="{% static 'newsvendor/index.css' %}" rel="stylesheet">
+            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+             <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+         <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+        <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    </head>
+
+    <body>
+        <section id='main'>
+
+            <section id=first >
+                <div class="logo">
+                   <p><h1 style="text-align: left; color: rgb(10, 10, 10);font-style:italic;">User Details
+                    <img src="{% static 'newsvendor/logo.png' %}"  alt="logo" style="vertical-align:middle;float: right;"></h1></p>
+                </div>
+
+                <div class="topnav">
+                   <p> </p>
+                </div>
+
+                <br><div>
+                    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                 <th>Game Name</th>
+                <th>Name</th>
+                <th>Email Address</th>
+                <th>Gender</th>
+                <th>Organization</th>
+                <th>feedback</th>
+                <th>Game Rounds</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+                </div>
+
+                <div>
+                    <!--<button onclick="redirectHomePage()" style="width:auto;">Download CSV file</button>-->
+                </div>
+
+            </section>
+
+
+
+            <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                 <h4 class="modal-title" id="myModalLabel">Feedback</h4>
+
+            </div>
+            <div class="modal-body">  <p id="bindFeedback"></p></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                 <h4 class="modal-title" id="myModalLabel2">Game Rounds Details</h4>
+
+            </div>
+            <div class="modal-body" id="bindRounds">
+              <input type="button" id="test" class="btn btn-default" onClick="fnExcelReport();" value="EXPORT" />
+                <div id='MessageHolder'></div>
+                <a href="#" id="testAnchor"></a><br>
+                <table id="bindtable">
+
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        </section>
+<!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script>
+
+        $(document).ready( function () {
+
+                getDemandPattern();
+
+                $.ajax(
+                {
+                    type:"GET",
+                    url: "/decomposednv/fetchuser",
+                    data:{
+                        uid:0
+                    },
+                    success: function( data )
+                    {
+                    var res = data.replace(/'/g, '"');
+                    var jsonData = JSON.parse(res)
+
+                        $('#example').dataTable({
+                        "data": jsonData,
+                        "columns": [
+                            { data: "gamename" },
+                            { data: "name" },
+                            { data: "email" },
+                            { data: "gender" },
+                            { data: "organisation" },
+                            {data: null,defaultContent: '<button id="viewFeedback" class="buttonss button5">View</button>'},
+                             {data: null,defaultContent: '<button id="viewRounds" class="buttonss button4">View</button>'}
+
+                        ]
+                    });
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                    }
+                })
+
+            });
+
+            function getDemandPattern(){
+                $.getJSON( "{% static 'newsvendor/DemandPattern.json' %}", function( data ) {
+                DemandPattern = data;
+                });
+            }
+
+            function redirectHomePage(){
+                  window.location.href="{% url 'newsvendor:index2' %}"
+            }
+
+            $('#example tbody').on('click', '#viewFeedback', function () {
+            var data = $("#example").DataTable().row($(this).parents('tr')).data();
+
+             $.ajax(
+                {
+                    type:"GET",
+                    url: "/decomposednv/fetchfeedback",
+                    data:{
+                        uid:data.uid
+                    },
+                    success: function( data )
+                    {
+                    var res = data.replace(/'/g, '"');
+                    var jsonData = JSON.parse(res)
+
+                    $("#bindFeedback").html(jsonData[0]["feedback"])
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                    }
+
+
+            });
+             $('#myModal').modal('show');
+});
+
+    var dataRounds = [];
+    var userDetailsInfo;
+    var feedbackInfo;
+    $('#example tbody').on('click', '#viewRounds', function () {
+            var data = $("#example").DataTable().row($(this).parents('tr')).data();
+            userDetailsInfo = data;
+            $("#bindtable").html("");
+            var nameOfField = "";
+            var gamename = data["gamename"]
+            if(gamename == "Game 1"){
+            nameOfField = "Fill Rate";
+            }else{
+                nameOfField = "Instock Probability";
+            }
+
+             $.ajax(
+                {
+                    type:"GET",
+                    url: "/decomposednv/fetchrounds",
+                    data:{
+                        uid:data.uid
+                    },
+                    success: function( data )
+                    {
+                    var res = data.replace(/'/g, '"');
+                    var jsonData = JSON.parse(res)
+                    dataRounds = jsonData
+                    var htmls = "<tr><th>SN</th><th>Mean Demand</th> <th>Standard Deviation</th> <th>"+nameOfField+"</th></tr>";
+                    for(var key in jsonData){
+                    var num = key;
+                    htmls += "<tr><td class='center number'></td><td>"+jsonData[key]["point_forecast"]+"</td><td>"+jsonData[key]["LB"]+"</td><td>"+jsonData[key]["UB"]+"</td></tr>"
+                    }
+                    $("#bindtable").html(htmls);
+                    $("td.number").each(function(i,v) {
+                            $(v).text(i + 1);
+                        });
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                    }
+
+
+            });
+             $('#myModal2').modal('show');
+              feedbackInfo = getfeedback(data.uid);
+              $('#bindtable').dataTable()
+
+
+
+});
+
+
+// Genrate Excel file
+
+  var tab_text;
+var data_type = 'data:application/vnd.ms-excel';
+
+
+function CreateHiddenTable(ListOfMessages)
+{
+var ColumnHead = "Column Header Text";
+var TableMarkUp='<table id="myModifiedTable" class="visibilityHide"><thead><tr><td><b>'+ColumnHead+'</b></td>  </tr></thead><tbody>';
+
+for(i=0; i<ListOfMessages.length; i++){
+    TableMarkUp += '<tr><td>' + ListOfMessages[i] +'</td></tr>';
+}
+TableMarkUp += "</tbody></table>";
+$('#MessageHolder').append(TableMarkUp);
+}
+
+function fnExcelReport() {
+var Messages = "\n message1.\n message2.";
+var ListOfMessages = Messages.split(".");
+
+CreateHiddenTable(ListOfMessages);
+
+    tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+    tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+
+    tab_text = tab_text + '<x:Name></x:Name>';
+
+    tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+    tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+
+     tab_text = tab_text + "<table>";
+     var html_table = "<tr><th>Name</th><th>Email Address</th><th>Organization</th><th>Gender</th><th>Game</th><th>Feedback</th></tr><tr><td>"+userDetailsInfo['name']+"</td><td>"+userDetailsInfo['email']+"</td><td>"+userDetailsInfo['organisation']+"</td><td>"+userDetailsInfo['gender']+"</td><td>"+userDetailsInfo['gamename']+"</td><td>"+feedbackInfo+"</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>"
+    tab_text = tab_text + html_table;
+    tab_text = tab_text + '</table>';
+
+    tab_text = tab_text + "<table>";
+    tab_text = tab_text + $('#bindtable').html();
+    tab_text = tab_text + '</table></body></html>';
+
+    data_type = 'data:application/vnd.ms-excel';
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        if (window.navigator.msSaveBlob) {
+            var blob = new Blob([tab_text], {
+                type: "application/csv;charset=utf-8;"
+            });
+            navigator.msSaveBlob(blob, 'Test file.xls');
+        }
+    } else {
+
+
+      $('#testAnchor')[0].click()
+    }
+$('#MessageHolder').html("");
+}
+$($("#testAnchor")[0]).click(function(){
+
+  $('#testAnchor').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+        $('#testAnchor').attr('download', userDetailsInfo['name']+'.xls');
+
+});
+
+function getfeedback(uid){
+$.ajax(
+                {
+                    type:"GET",
+                    url: "/decomposednv/fetchfeedback",
+                    data:{
+                        uid:uid
+                    },
+                    success: function( data )
+                    {
+                    var res = data.replace(/'/g, '"');
+                    var jsonData = JSON.parse(res)
+                    feedbackInfo = jsonData[0]["feedback"]
+
+                    return jsonData;
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                        return null;
+                    }
+
+
+            });
+}
+
+        </script>
+    </body>
+</html>

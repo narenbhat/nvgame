@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Round Over</title>
+            <meta charset="UTF-8">
+            <link href="{% static 'newsvendor/index.css' %}" rel="stylesheet">
+            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    </head>
+
+    <body>
+        <section id='main'>
+
+
+            <section id=first >
+                <div class="logo">
+                   <p><h1 style="text-align: left; color: rgb(10, 10, 10);font-style:italic;">Game 1
+                    <img src="{% static 'newsvendor/logo.png' %}"  alt="logo" style="vertical-align:middle;float: right;"></h1></p>
+                </div>
+
+                <div class="topnav">
+                   <p> </p>
+                </div>
+
+                <div>
+                    <h1 style="font-style:italic;">Game 1 is over</h1>
+                </div>
+
+                 <div class="intro">
+                    <h3>
+                        Please provide feedback
+                    </h3>
+                    <h5>
+                        <textarea  style="width:600px;height:150px;" name="comment" id="feedback" placeholder="Please explain your decision making process"></textarea>
+                    </h5>
+                     <p>Please wait for instructions before starting Game 2</p>
+                      <button onclick="savefeedback()" style="width:auto;">Submit Feedback</button><br><br>
+                </div>
+
+                <div>
+
+                    <button onclick="redirectHomePage()" style="width:auto;">Start Game 2</button>
+                </div>
+
+
+            </section>
+
+
+        </section>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+
+        function savefeedback(){
+             var uid = localStorage.getItem("uid");
+              $.ajax(
+                {
+                    type:"GET",
+                    url: "/decomposednv/feedback",
+                    data:{
+                        uid:uid,
+                        feedback:$("#feedback").val()
+                    },
+                    success: function( data )
+                    {
+                     alert("Feedback submitted successfully")
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                    }
+                })
+        }
+
+            function redirectHomePage(){
+               window.location.href="{% url 'newsvendor:index2' %}"
+
+            }
+        </script>
+    </body>
+</html>

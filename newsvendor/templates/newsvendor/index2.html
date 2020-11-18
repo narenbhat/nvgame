@@ -8,28 +8,28 @@
             <link href="{% static 'newsvendor/index.css' %}" rel="stylesheet">
             <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
             <meta name="viewport" content="width=device-width, initial-scale=1">
-          
+
     </head>
 
     <body>
         <section id='main'>
-            
+
             <form>
                 {% csrf_token %}
             <section id=first >
                 <div class="logo">
-                   <p><h1 style="text-align: left; color: rgb(10, 10, 10);font-style:italic;">Game 1
-                    <img src="{% static 'newsvendor/logo.png' %}"  alt="logo" style="vertical-align:middle;float: right;"></h1></p> 
+                   <p><h1 style="text-align: left; color: rgb(10, 10, 10);font-style:italic;">Game 2
+                    <img src="{% static 'newsvendor/logo.png' %}"  alt="logo" style="vertical-align:middle;float: right;"></h1></p>
                 </div>
-    
+
                 <div class="topnav">
-                   <p> </p> 
+                   <p> </p>
                 </div>
-    
+
                 <div>
                     <h1 style="font-style:italic;">Thanks for accepting our request!</h1>
                 </div>
-                
+
 
                 <div class="intro">
                     <h3>
@@ -45,10 +45,11 @@
                             <h2>Ethics </h2>
                         <div style="border:3px solid rgb(0, 183, 255) ;margin: auto;">
                             <p>All aspects of this study have been approved by the IITB Institute Ethics Committee, vide approval number IITB-IEC/2019/007. The informed consent form and task and incentive details have been provided by email. Your participation in the research is optional; we will use your data only if you consent to it here.</p>                        </div>
+                        </div>
                         <div>
                             <button onclick="document.getElementById('ethics').style.display='none'" style="width:auto;">Close</button>
                         </div>
-                    </div> 
+                    </div>
                 </section>
                 <div>
                     <h4>This survey takes approximately 5 mins.</h4>
@@ -63,16 +64,16 @@
 
             <section id="second">
                 <div class="logo">
-                    <p><h1 style="text-align: left; color: rgb(10, 10, 10);font-style:italic;">Game 1
-                     <img src="{% static 'newsvendor/logo.png' %}"  alt="logo" style="vertical-align:middle;float: right;"></h1></p> 
+                    <p><h1 style="text-align: left; color: rgb(10, 10, 10);font-style:italic;">Game 2
+                     <img src="{% static 'newsvendor/logo.png' %}"  alt="logo" style="vertical-align:middle;float: right;"></h1></p>
                  </div>
-     
+
                  <div class="topnav">
-                    <p> </p> 
+                    <p> </p>
                  </div>
 
                 <h1 style="text-align: center;">Demographics</h1>
-                 
+
                 <div class="card">
                     <img src={% static 'newsvendor/demographics1.png' %} alt="Demographics" style="width:100%">
                     <div class="container">
@@ -89,9 +90,9 @@
                                     <option value="Other">Other</option>
                                   </select>
                                 </div>
-        
+
                                 <div>
-                                 <p><label for="gender">Please select your age:</label></p> 
+                                 <p><label for="gender">Please select your age:</label></p>
                                  <input type="number" id="age" name="age" min = "1">
                                   <!--<select id="age" name="age">
                                     <option disabled selected value> -- select an option -- </option>
@@ -100,11 +101,11 @@
                                       <option value="age3">61 - 100</option>
                                     </select> -->
                                 </div>
-        
+
                             </div>
                             <div class="column">
                                 <div>
-                               <p><label for="organisation">Please select your organisation:</label></p> 
+                               <p><label for="organisation">Please select your organisation:</label></p>
                                 <select id="organisation" name="organisation">
                                     <option disabled selected value> -- select an option -- </option>
                                     <option value="Management">Management</option>
@@ -113,8 +114,8 @@
                                   </select>
                                 </div>
                                 <div>
-                                
-                                <p> <label for="designation">Please select your designation:</label></p>   
+
+                                <p> <label for="designation">Please select your designation:</label></p>
                                 <select id="designation" name="designation">
                                     <option disabled selected value> -- select an option -- </option>
                                     <option value="Student">Student</option>
@@ -128,27 +129,27 @@
                   </div>
 
 
-                <p><button id="secondsubmit" style="width:auto;">Next</button></p> 
+                <p><button id="secondsubmit" style="width:auto;">Next</button></p>
             </section>
 
             <section id="third">
-                
+
                 <div class="logo">
-                    <p><h1 style="text-align: left; color: rgb(10, 10, 10);font-style:italic;">Game 1
-                     <img src="{% static 'newsvendor/logo.png' %}"  alt="logo" style="vertical-align:middle;float: right;"></h1></p> 
+                    <p><h1 style="text-align: left; color: rgb(10, 10, 10);font-style:italic;">Game 2
+                     <img src="{% static 'newsvendor/logo.png' %}"  alt="logo" style="vertical-align:middle;float: right;"></h1></p>
                  </div>
-     
+
                  <div class="topnav">
-                    <p> </p> 
+                    <p> </p>
                  </div>
-                
-                
+
+
                 <div style="align-content:left;">
                     <h1><p><label style="text-align: left;">Round :  </label><label id="round" style="text-align:left">1</label></p></h1>
                 </div>
                 <div class="row">
                     <div class="column">
-                        
+
                         <div class="card">
                             <div id="plot" style="max-width:600px;max-height:500px;"></div>
                             <div id="even">
@@ -169,11 +170,11 @@
 
                             </div>
                           </div>
-                          
+
 
                     </div>
-                    
-                
+
+
                     <div class="column" >
 
                         <div class="card">
@@ -205,8 +206,8 @@
                                     </td>
                                 </tr>
                                     <td>
-                                        <h3><label for="UB">Fill Rate</label></h3> : <label style="font-size: 12px;">the expected fraction of demand you can meet with your stock</label><p>
-                                            <input type="number" id="UB" name="UB" style="border:2px solid #008000;height:30px; width:225px;" onclick="show_cost()">
+                                        <h3><label for="UB">Instock Probability</label></h3> : <label style="font-size: 12px;">The probability that you have enough stock to meet the demand completely</label><p>
+                                            <input type="number" id="UB" name="UB" style="border:2px solid #008000;height:30px; width:225px;" onclick="show_cost()" >
                                             </p>
                                     </td>
 <!--                                    <td>-->
@@ -221,9 +222,9 @@
                           </div>
                         </table>
                     </div>
-                    
+
                 </div>
-                
+
             </section>
             </form>
 
@@ -240,7 +241,7 @@
             var pattern=[];
             var week_no=[];
             var graph;
-            
+
             var layout = {
                     title: 'Demand Pattern',
                     xaxis: {
@@ -271,7 +272,7 @@
                 // }
             }
             var user=new Object();
-            
+
 
             document.addEventListener('DOMContentLoaded',()=>{
                 var modal=document.getElementById('ethics');
@@ -283,7 +284,7 @@
             }
 
             document.getElementById('firstsubmit').onclick=function(){
-                
+
                 user.email=document.getElementById('email').value;
                 $.ajax(
                 {
@@ -291,9 +292,9 @@
                     url: "/decomposednv/checkEmail",
                     data:{
                              email: user.email,
-                             gamename : 'Game 1'
+                             gamename : 'Game 2'
                     },
-                    success: function( data ) 
+                    success: function( data )
                     {
                         if(data=='False')
                         {
@@ -309,10 +310,10 @@
                  })
                 return false;
             }
-            
-            
+
+
             document.getElementById('secondsubmit').onclick=function(){
-                 
+
                 user.email=document.getElementById('email').value;
                 user.name=document.getElementById("name").value;
                 user.gender=document.getElementById('gender').value;
@@ -320,7 +321,7 @@
                 if(document.getElementById('age').value != ""){user.age=document.getElementById('age').value;}else{user.age=0}
                 user.organisation=document.getElementById('organisation').value;
                 user.designation=document.getElementById('designation').value;
-                user.gamename="Game 1";
+                user.gamename="Game 2";
                 $.ajax(
                 {
                     type:"GET",
@@ -334,7 +335,7 @@
                             designation:user.designation,
                             gamename:user.gamename,
                     },
-                    success: function( data ) 
+                    success: function( data )
                     {
                             uid = data['uid'];
                             localStorage.setItem("uid", data['uid']);
@@ -354,7 +355,7 @@
 <!--                            document.getElementById('round').innerHTML=data['qid'];-->
 <!--                           plotGraph();-->
 
-                            
+
                     }
                 })
 
@@ -401,7 +402,7 @@
                 if(fillRate != ""){
                 $.getJSON( "{% static 'newsvendor/DemandPattern.json' %}", function( data ) {
                         if(ArrLength >19){
-                            location.href="{% url 'newsvendor:roundOver' %}"
+                            location.href="{% url 'newsvendor:roundOver2' %}"
                         }else{
                         document.getElementById('second').style.display='none';
                             document.getElementById('third').style.display='block';
@@ -461,7 +462,7 @@
                 })
                 return false;
             }
-        
+
             })
 
 

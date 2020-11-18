@@ -21,6 +21,7 @@ class user(models.Model):
 	age = models.PositiveIntegerField()
 	organisation = models.CharField(max_length=128)
 	designation = models.CharField(max_length=128)
+	gamename = models.CharField(default='0000000' ,max_length=128)
 	def __str__(self):
 		return f"{self.name} - {self.email}"
 
@@ -33,4 +34,10 @@ class answer(models.Model):
 	target_fill_rate = models.DecimalField(max_digits=5, decimal_places=2)
 	def __str__(self):
 		return f"User = {self.uid}, Q = {self.qid}, Point Forecast = {self.point_forecast}"
-	
+
+class feedback(models.Model):
+	uid = models.PositiveIntegerField()
+	qid = models.PositiveIntegerField()
+	feedback = models.CharField(max_length=4000)
+	def __str__(self):
+		return f"User = {self.uid}, Q = {self.qid}, Point Forecast = {self.feedback}"
